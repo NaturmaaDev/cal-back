@@ -26,10 +26,11 @@ app.use(setCurrentUser);
 const db = require("./model/index");
 db.Sequelize.sync();
 
-app.get("/category/all", isLoggedIn, categoryController.findAll);
-app.get("/product/all", isLoggedIn, productController.findAll);
+app.get("/category/all", categoryController.findAll);
+app.get("/product/all", productController.findAll);
 app.get("/product/cat", productController.getByCategory);
-app.get("/product/search", isLoggedIn, productController.getByName);
+app.get("/product/search", productController.getByName);
+
 app.post("/usage/create", isLoggedIn, usageController.addUsage);
 app.get("/usage/get", isLoggedIn, usageController.getUsagesByDay);
 
