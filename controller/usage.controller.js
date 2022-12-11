@@ -33,7 +33,9 @@ exports.addUsage = (req, res) => {
   Usage.create(usage)
     .then(async (data) => {
       // console.log("data", data);
+
       let total = await calculate(req.user.id);
+      console.log("total", total);
       res.json({ data: total, error: false, message: "" });
     })
     .catch((err) => {
