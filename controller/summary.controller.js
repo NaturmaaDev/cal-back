@@ -10,7 +10,7 @@ const Product = db.products;
 exports.calculate = async (userId) => {
   //   const date = Date.toString();
   const startDate = new Date().toISOString().split("T")[0];
-
+  let todayEnergy = 0;
   Usage.findAll({
     includes: ["date", "userId", "productId", "count"],
     where: {
@@ -24,7 +24,6 @@ exports.calculate = async (userId) => {
     },
     raw: false,
   }).then(async (re) => {
-    let todayEnergy = 0;
     re = JSON.parse(JSON.stringify(re));
     re.map(async (usage) => {
       let productItem = await Product.findByPk(usage.productId);

@@ -31,14 +31,16 @@ exports.addUsage = (req, res) => {
   //
 
   Usage.create(usage)
-    .then((data) => {
+    .then(async (data) => {
       // console.log("data", data);
-      calculate(req.user.id);
-      res.json({ data });
+      let total = await calculate(req.user.id);
+      res.json({ data: total, error: false, message: "" });
     })
     .catch((err) => {
-      res.status(500).send({
-        Message: err.message || "Some errors will occur when creating usage",
+      res.status(500).json({
+        error: true,
+        data: null,
+        message: err.message || "Some errors will occur when creating usage",
       });
     });
 };
