@@ -3,18 +3,17 @@ module.exports = (Sequelize, sequelize) => {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,
-      //defaultValue: Sequelize.literal("gen_random_uuid()"),
       primaryKey: true,
     },
     email: {
-      type: Sequelize.TEXT,
+      type: Sequelize.STRING,
       primaryKey: true,
     },
     name: {
-      type: Sequelize.TEXT,
+      type: Sequelize.STRING,
     },
     password: {
-      type: Sequelize.TEXT,
+      type: Sequelize.STRING,
     },
   });
 
