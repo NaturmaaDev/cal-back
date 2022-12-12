@@ -2,6 +2,9 @@ const db = require("../model/index");
 
 const jwt = require("jsonwebtoken");
 const { calculate } = require("./summary.controller");
+const product = db.products;
+const summary = db.summaries;
+const { Op } = require("sequelize");
 //const bcrypt = require("bcryptjs");
 
 const Usage = db.usages;
@@ -48,12 +51,39 @@ exports.addUsage = (req, res) => {
 };
 
 exports.getUsagesByDay = (req, res) => {
-  Usage.findAll({})
-    .then((data) => {
-      res.json({ data });
+  const startDate = new Date(req.body.date).toISOString().split("T")[0];
+
+  Usage.findAll({
+    where: {
+      date: {
+        [Op.lt]: new Date(
+          new Date(startDate).getTime() + 60 * 60 * 24 * 1000 - 1
+        ),
+        [Op.gt]: new Date(startDate),
+      },
+    },
+  })
+    .then(async (data) => {
+      data = JSON.parse(JSON.stringify(data));
+      let summar = await summary.findOne({
+        where: {
+          date: startDate,
+        },
+      });
+      let result = [];
+      await Promise.all(
+        data.map(async (dat) => {
+          let pro = await product.findOne({ id: dat.productId });
+          pro = JSON.parse(JSON.stringify(pro));
+          result.push({ ...dat, product: pro });
+        })
+      );
+      res.json({ data: { result, summar }, error: false, message: "" });
     })
     .catch((err) => {
       res.status(500).send({
+        data: null,
+        error: true,
         message:
           err.message || "Some error have occurent when try to get usages.",
       });
