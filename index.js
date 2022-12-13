@@ -32,7 +32,7 @@ app.get("/product/cat", productController.getByCategory);
 app.get("/product/search", productController.getByName);
 
 app.post("/usage/create", isLoggedIn, usageController.addUsage);
-app.get("/usage/get", isLoggedIn, usageController.getUsagesByDay);
+app.put("/usage/get", isLoggedIn, usageController.getUsagesByDay);
 
 app.post("/user/register", userController.register);
 app.post("/user/login", userController.login);
