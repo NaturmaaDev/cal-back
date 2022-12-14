@@ -73,11 +73,12 @@ exports.getUsagesByDay = (req, res) => {
       let result = [];
       await Promise.all(
         data.map(async (dat) => {
-          let pro = await product.findOne({ id: dat.productId });
+          let pro = await product.findByPk(dat.productId);
           pro = JSON.parse(JSON.stringify(pro));
           result.push({ ...dat, product: pro });
         })
       );
+
       res.json({ data: { result, summar }, error: false, message: "" });
     })
     .catch((err) => {
